@@ -1,0 +1,17 @@
+---
+- name: to play with var files
+  hosts: all
+  gather_facts: false
+  vars:
+   age: 25
+   name: "eashu"
+   my_numb: "8088184156"
+  tasks:
+   - name: to display the vars and their type
+     debug:
+      msg:
+       - "The name of a person is {{ name }} and the type is {{ name|type_debug }}"
+       - "The age of a person is {{ age }} and the type is {{ age|type_debug }}"
+       - "the phone number of a person is {{ my_numb }} and the type is {{ my_numb|type_debug }}"
+
+  
