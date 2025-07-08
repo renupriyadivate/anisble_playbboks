@@ -1,0 +1,90 @@
+---
+- name: to install apache and copy html file from local to remote server
+  hosts: web
+  become: true
+  tasks:
+  - name: to install apache2
+    ansible.builtin.apt:
+      name: apache2
+      state: present
+      update_cache: yes
+  - name: to start the service
+    ansible.builtin.service:
+      name: apache2
+      state: started
+  - name: to check if apache2 server is running
+    ansible.builtin.shell: "systemctl status apache2"
+    register: check_apache_status
+  - name: show apache status
+    debug:
+     msg: "{{check_apache_status.stdout}}"
+  - name: to create a file in server
+    ansible.builtin.file:
+      path: /home/ubuntu/eashufile
+      state: touch
+      mode: '0666'
+  - name: to write something imto the file
+    ansible.builtin.shell: "echo 'hello renupriya' >> /home/ubuntu/eashufile"
+  - name: to view if the file is created and to view the content
+    ansible.builtin.shell: "ls -l && cat eashufile"
+    register: check_file
+  - name: to check if the file is created or not
+    debug:
+      msg: "{{ check_file.stdout }}"
+  - name: to copy file from source to remoteserver
+    ansible.builtin.copy:
+      src: index.html
+      dest: /var/www/html
+      owner: root
+      group: root
+  - name: to check if the file is copied or not
+    ansible.builtin.shell: "cd /var/www/html && ls -l && cat index.html" 
+    register: check_copied
+  - name: to check if the file is copied
+    debug:
+     msg: "{{ check_copied.stdout }}"   
+  - name: to create a directory using module file
+    ansible.builtin.file:
+      path: /home/ubuntu/directory
+      state: directory
+      mode: '0777'
+      owner: root
+      group: root
+  - name: to create a directory using the shell module
+    ansible.builtin.shell: "mkdir aishu && cd aishu && echo 'hi aishu' > file1 &&  ls -l && cat file1"
+    register: check_dir
+  - name: to view if the directory is created
+    debug:
+      msg: "{{ check_dir.stdout }}"
+  - name: to create a user
+    ansible.builtin.user:
+      name: 'anjana'
+      state: present
+  - name: to create a group
+    ansible.builtin.group:
+      name: 'staging'
+      state: present
+  - name: to add user to group
+    ansible.builtin.user:
+      name: 'anjana'
+      group: 'staging'
+  - name: to check if the user is created
+    ansible.builtin.shell: "cat /etc/passwd | grep 'anjana' "
+    register: check_user
+  - name: to view if user is created
+    debug:
+     msg: "{{ check_user.stdout }}"
+  - name: to check if the group is created
+    ansible.builtin.shell: "cat /etc/group | grep 'staging' "
+    register: check_group
+  - name: to view if group is created
+    debug:
+     msg: "{{ check_group.stdout }}"
+  - name: to check if the user belongs to that group
+    ansible.builtin.shell: "groups anjana"
+    register: check_user_belong_to_group
+  - name: to view if user belongs to that group
+    debug:
+     msg: "{{ check_user_belong_to_group.stdout }}"
+   
+     

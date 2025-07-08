@@ -1,0 +1,10 @@
+---
+ - name: playbook to create file in remote server
+   hosts: all
+   become: true
+   tasks:
+    - name: to create file1 in destination server
+      file:
+       path: /home/ubuntu/
+       state: touch
+    

@@ -1,0 +1,9 @@
+---
+ - name: to create a user
+   hosts: all
+   become: true
+   tasks:
+    - name: to create a user named raju
+      user:
+       name: aishu
+       state: present
