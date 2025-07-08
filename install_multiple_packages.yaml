@@ -1,0 +1,26 @@
+---
+- name: this is the playbook to install multiple packages
+  hosts: all
+  gather_facts: true
+  become: true
+  tasks:
+  - name: to install webserver on debian
+    ansible.builtin.apt:
+      name: apache2
+      state: present
+    when: ansible_os_family == "Debian"
+  - name: to install webserver on RedHat
+    ansible.builtin.yum:
+      name: httpd
+      state: present
+    when: ansible_os_family == "RedHat"
+  - name: to install java on RedHat
+    ansible.builtin.yum:
+      name: "java-21-openjdk-devel"
+      state: present
+    when: ansible_os_family == "RedHat"
+  - name: to install java on debian
+    ansible.builtin.apt:
+      name: "openjdk-21-jdk"
+      state: present
+    when: ansible_os_family == "debian"
