@@ -1,0 +1,27 @@
+---
+- name: a simple playbook
+  hosts: web
+  gather_facts: false
+
+  vars:
+    x: 66
+    pkgs:
+      - 'vim'
+      - 'nano'
+      - 'httpd'
+      - 'nginx'
+    webservers:
+      'RedHat': 'httpd'
+      'Debian': 'apache2'
+
+  tasks:
+    - name: show me which web server is used for debian
+      debug:
+        msg: 
+          - "the webserver used for RedHat is {{ webservers.get('RedHat') }}"
+          - "the webserver used for Debian is {{ webservers.get('Debian') }}"
+
+    - name: list me all the packages
+      debug:
+        msg: "packages: {{ item }}"
+      loop: "{{ pkgs }}"
