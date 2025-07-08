@@ -1,0 +1,26 @@
+---
+- name: playbook to demonstrate vars prompt
+  hosts: web
+  gather_facts: false
+
+
+  vars:
+    age: 25
+    name: kishore
+  
+  
+  vars_prompt:
+   - name: user_name
+     prompt: "enter your user name"
+     private: no
+  
+   - name: password
+     prompt: "enter your password"
+     private: yes
+  
+  tasks:
+   - name: fetch the username n password and display it to user
+     debug:
+       msg:
+        - "username is {{ user_name }}"
+        - "password is {{ password }}"
