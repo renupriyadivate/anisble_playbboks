@@ -1,0 +1,22 @@
+---
+- name: lets try out some filter methods
+  hosts: web
+  gather_facts: true
+  vars:
+    x: "ThiS IS abOut Ansible FilTERS AND mETHODS"
+    y: "56"
+    z: [4,5,6,38,0]
+  
+  tasks:
+  - name: lets see how to filter using some common methods
+    debug:
+      msg:
+       - "{{ x|lower }}"
+       - "{{ x|upper }}"
+       - "{{ x.lower() }}"
+       - "{{ x.upper() }}"
+       - "{{ x|title }}"
+       - "{{ y|int }}"
+       - "{{ z|max }}"
+       - "{{ z|min }}"
+       - "{{ x.split() }}"
