@@ -1,0 +1,17 @@
+---
+- name: to perform arthmatic operations
+  hosts: web
+  gather_facts: false
+  vars: 
+   x: 55
+   y: 44
+  tasks:
+   - name: to perform addition, substraction, multiplication and division
+     debug:
+      msg:
+      - "The adition of two nos {{x}} + {{y}} = {{x+y}}"
+      - "The substraction of two nos {{x}} - {{y}} = {{x-y}}"
+      - "The multiplication of two nos {{x}} * {{y}} = {{x*y}}"
+      - "The division of two nos {{x}} / {{y}} = {{x/y}}"
+      - "the remainder of two nos {{x}} % {{y}} = {{x%y}}"
+   
