@@ -1,0 +1,9 @@
+---
+- name: to stop the instances
+  hosts: all
+  gather_facts: true
+  become: true
+  tasks:
+  - name: to stop the particular instance_type
+    ansible.builtin.command: "/sbin/shutdown -h now"
+    when: ansible_os_family == "Debian"

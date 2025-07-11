@@ -6,4 +6,5 @@
    tasks:
    - shell: "bash --version"
      register: bash_ver
-   - debug: var=bash_ver.stdout.split("\n")[0].split()[3]
+   - debug: 
+      var:  bash_ver.stdout.split('\n')[0].split()[3]

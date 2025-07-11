@@ -1,0 +1,23 @@
+---
+- name: to create multiple instances
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: creating multiple instances
+    amazon.aws.ec2_instance:
+      name: "{{item.name}}"
+      instance_type: t2.micro
+      key_name: test_key
+      security_group: default
+      region: us-west-1
+      aws_access_key: "{{ aws_access_key }}"
+      aws_secret_key: "{{ aws_secret_key }}"
+      network:
+       assign_public_ip: true
+      image_id: "{{ item.image }}"
+    loop:
+     - { name: "ansible-ubuntu-instance1" , image: "ami-014e30c8a36252ae5" }
+     - { name: "ansible-ubuntu-instance2" , image: "ami-014e30c8a36252ae5" }
+     - { name: "ansible-linux-instance3" , image: "ami-061ad72bc140532fd"}
+    
+

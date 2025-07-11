@@ -1,0 +1,25 @@
+---
+- name: to make use of ignore_messages
+  hosts: all
+  gather_facts: true
+  become: true
+  tasks:
+  - name: to check if openssh and openssl is installed or not 
+    ansible.builtin.apt:
+      name: "{{ item }}"
+      state: latest
+    loop: 
+     - openssh
+     - openssl
+    ignore_errors: yes
+  - name: to check if docker is installed or not
+    ansible.builtin.command: "docker --version"
+    register: output
+    ignore_errors: yes  
+  - name: to install docker if it is not installed
+    ansible.builtin.apt:
+      name: docker.io
+      state: present
+    when: output.failed == true
+      
+

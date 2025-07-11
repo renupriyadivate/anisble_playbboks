@@ -1,0 +1,19 @@
+---
+- name: to implement policy as code in aws s3 bucket
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+  - name: list the s3 bucket
+    amazon.aws.s3_bucket_info:
+    register: output
+
+  - name: to display the s3 bucket output
+    ansible.builtin.debug:
+      var: output
+  
+  - name: enable versioing on s3 bucket
+    amazon.aws.s3_bucket:
+      name: "{{ item.name }}"
+      versioning: true
+    loop: "{{ output.buckets }}"
