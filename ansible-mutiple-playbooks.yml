@@ -1,0 +1,76 @@
+---
+- name: my first play too deal with apt service
+  hosts: all
+  become: true
+  tasks:
+   - name: to install nginx
+     ansible.builtin.apt:
+       name: nginx
+       state: present
+   - name: to check if the service started
+     ansible.builtin.shell: "systemctl status nginx"
+     register: apache2_running_status
+   - name: to display the output of the service started
+     ansible.builtin.debug:
+       var: apache2_running_status.stdout_lines
+- name: my second play too deal with copy
+  hosts: all
+  become: true
+  tasks:
+   - name: to copy the file from source to destination
+     ansible.builtin.copy:
+       src: /home/ubuntu/ansible-key.pem
+       dest: /home/ubuntu/
+       mode: '0666'
+   - name: to check if the file is copied
+     ansible.builtin.shell: "ls -l"
+     register: file_copied
+   - name: to view the output if the file is copied
+     ansible.builtin.debug:
+       var: file_copied.stdout_lines
+- name: my third play to deal with file module
+  hosts: all
+  become: true
+  tasks:
+   - name: to create a file in destination
+     ansible.builtin.file:
+        path: /home/ubuntu/file1
+        state: touch
+   - name: to create a directory in the destination
+     ansible.builtin.file:
+        path: /home/ubuntu/dir
+        state: directory
+   - name: to check if the file and directory is created
+     ansible.builtin.shell: "ls -l && cd dir && ls -l"
+     register: output_status
+   - name: to view the output in console
+     ansible.builtin.debug:
+        var: output_status.stdout_lines
+- name: my 4th play book to dea with user module
+  hosts: all
+  become: true
+  tasks:
+   - name: to create user
+     ansible.builtin.user:
+        name: eashu
+        state: present
+   - name: to check if the user is created
+     ansible.builtin.shell: "grep 'eashu' /etc/passwd "
+     register: user_status
+   - name: to display the output is created
+     ansible.builtin.debug:
+        var: user_status.stdout_lines
+- name: my 5th play to create a group
+  hosts: all
+  become: true
+  tasks:
+   - name: to create a group
+     ansible.builtin.group:
+        name: admin
+        state: present
+   - name: to check if the group is created
+     ansible.builtin.shell: "grep '^admin' /etc/group"
+     register: group_status
+   - name: to see the output in consoleeee
+     ansible.builtin.debug:
+        var: group_status.stdout_lines
