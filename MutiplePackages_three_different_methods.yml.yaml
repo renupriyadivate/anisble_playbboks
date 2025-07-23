@@ -1,0 +1,51 @@
+---
+- name: to install multiple pacakages
+  hosts: all
+  become: true
+  tasks:
+    - name: to install many pacakges
+      ansible.builtin.apt:
+        name:
+          - git
+          - curl
+          - apache2
+          - wget
+          - htop
+        state: present
+        update_cache: true
+
+---
+- name: to install multiple pacakages
+  hosts: all
+  become: true
+  vars:
+    package_list:
+      - git
+      - curl
+      - wget
+      - htop
+      - apache2
+  tasks:
+    - name: to install pacakages
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      loop: "{{ package_list }}"
+
+---
+- name: to install multiple pacakages
+  hosts: all
+  become: true
+  tasks:
+    - name: to install pacakges
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: true
+      loop:
+        - git
+        - curl
+        - wget
+        - htop
+        - apache2
