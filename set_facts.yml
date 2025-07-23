@@ -1,0 +1,31 @@
+---
+- name: to create multiple users , create group and add user to that group
+  hosts: all
+  become: true
+  vars:
+    userlist:
+      - { name: aishu, shell: /bin/bash }
+      - { name: parikshit, shell: /bin/bash }
+      - { name: veda, shell: /bin/bash }
+    common_group: devadmin
+
+  tasks:
+    - name: Generate password hash on controller
+      ansible.builtin.set_fact:
+        user_password: "{{ '1234' | password_hash('sha512') }}"
+      delegate_to: localhost
+
+    - name: to create group
+      ansible.builtin.group:
+        name: "{{ common_group }}"
+        state: present
+
+    - name: to create users
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        shell: "{{ item.shell }}"
+        groups: "{{ common_group }}"
+        password: "{{ user_password }}"
+        create_home: true
+        state: present
+      loop: "{{ userlist }}"
