@@ -1,0 +1,14 @@
+---
+- name: to create multiple users
+  hosts: all
+  become: true
+  tasks:
+   - name: to create multiple users
+     ansible.builtin.user:
+       name: "{{ item }}"
+       state: present
+       create_home: true
+     loop:
+       - aishu
+       - parikshit
+       - aditya
