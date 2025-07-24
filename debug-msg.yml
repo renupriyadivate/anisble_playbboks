@@ -1,0 +1,43 @@
+---
+- name: lets work with vars and ansible
+  hosts: all
+  become: true
+  tasks:
+    - name: let us know who is the curent workimg directory
+      ansible.builtin.shell: "pwd"
+      register: pwd
+    - name: let us understand about the who is currently logged in
+      ansible.builtin.shell: "whoami"
+      register: whoami
+    - name: lets install the cal pacakge
+      ansible.builtin.apt:
+        name: ncal
+        state: present
+        update_cache: true
+    - name: let us know the current month calender
+      ansible.builtin.shell: "cal"
+      register: cal
+    - name: let see the output of all now
+      ansible.builtin.debug:
+       msg:
+           pwd: "{{ pwd.stdout_lines }}"
+           whoami: "{{ whoami.stdout_lines }}"
+           cal: "{{ cal.stdout_lines }}"
+    - name: let see the output of all now
+      ansible.builtin.debug:
+        msg:
+          - "pwd_output: {{ pwd.stdout_lines }}"
+          - "whoami_output: {{ whoami.stdout_lines }}"
+          - "cal: {{ cal.stdout_lines }}"
+    - name: let see the output of all now
+      ansible.builtin.debug:
+        msg:
+          - "{{ pwd.stdout_lines }}"
+          - "{{ whoami.stdout_lines }}"
+          - "{{ cal.stdout_lines }}"
+    - name: let see the output of all now
+      ansible.builtin.debug:
+        msg:
+          - " The present working directoery is : {{ pwd.stdout_lines }}"
+          - " Thw currebt logged in user is: {{ whoami.stdout_lines }}"
+          - " The current calender is {{ cal.stdout_lines }}"
