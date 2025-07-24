@@ -1,0 +1,18 @@
+---
+ - name: Installing multiple package
+   hosts: webservers
+   gather_facts: true
+   become: yes
+   tasks:
+   - name: Installing webservers on redhat_fmaily
+     yum: name=httpd state=present
+     when: ansible_os_family=="RedHat"
+   - name: Installing webservers on debian_fmaily
+     apt: name=apache2 state=present
+     when: ansible_os_family=="Debian"
+   - name: Installing java on debian_fmaily
+     apt: name=openjdk-8-jdk state=present
+     when: ansible_os_family=="Debian"
+   - name: Installing java on redhat_fmaily
+     yum: name=java-1.8.0-openjdk state=present
+     when: ansible_os_family=="RedHat"
