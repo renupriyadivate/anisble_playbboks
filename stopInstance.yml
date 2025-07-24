@@ -1,9 +1,32 @@
 ---
-- name: to stop the instances
-  hosts: all
-  gather_facts: true
-  become: true
+- name: Stop EC2 Debian Instances
+  hosts: localhost
+  connection: local
+  gather_facts: false
+
+  vars:
+    region: us-east-1
+
   tasks:
-  - name: to stop the particular instance_type
-    ansible.builtin.command: "/sbin/shutdown -h now"
-    when: ansible_os_family == "Debian"
+    - name: Get instance facts
+      amazon.aws.ec2_instance_info:
+        region: "{{ region }}"
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+      register: ec2_info
+
+    - name: Print EC2 info (optional)
+      debug:
+        var: ec2_info.instances
+
+    - name: Stop only Debian EC2 instances
+      amazon.aws.ec2_instance:
+        region: "{{ region }}"
+        instance_ids: "{{ item.instance_id }}"
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        state: stopped
+      loop: "{{ ec2_info.instances }}"
+      when:
+        - item.tags.Name is defined
+        - "'debian' in item.tags.Name | lower"
